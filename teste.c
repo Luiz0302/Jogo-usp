@@ -11,7 +11,7 @@ int main() {
     // informações player
 
     int hp = 20;
-    int arma = 0;
+    int arma_equipada = 0;
     int limite_arma = 1;
     int skip_sala = 0;
     int pode_skip = 1;
