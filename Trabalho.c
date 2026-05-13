@@ -17,7 +17,7 @@ int main() {
     int skip_sala = 0;
     int pode_skip = 1;
 
-    // informações na mesa
+    // informações da mesa
 
     int mesa_ativa[4];
     int carta_valor;
@@ -27,11 +27,22 @@ int main() {
     printf("Sobreviva ás 10 salas ou sucumba tentando.\n");
 
 
+    // Status do player
+
+    printf("=========== Status do Player ===========\n");
+    printf("HP: %d\n", hp);
+    printf("Arma Equipada: %d\n", arma_equipada);
+    printf("Limite de Armas: %d\n", limite_arma);
+    printf("Pode pular a sala: %d\n", pode_skip);
+
+    
+    
+    
     // --- Finalização do jogo ---
 
     if (hp <= 0) // Tem que add condição de vitória, mas como não tem nada, vamo se virar com o hp
     {
-        printf("=========== Game Over! =========== \n Você foi consumido pela masmorra \n");
+        printf("========= Game Over! ========= \n Você foi consumido pela masmorra \n");
     }
     else
     {
