@@ -9,11 +9,26 @@ int main() {
     int baralho_naipes[44]; 
 
     // informações player
-    int hp = 0;
 
+    int hp = 20;
+    int arma = 0;
+    int limite_arma = 1;
+    int skip_sala = 0;
+    int pode_skip = 1;
+
+    // informações mesa
+
+    
+
+
+    // --- Finalização do jogo ---
     if (hp <= 0)
     {
-        printf("=========== Game Over! =========== \nVocê foi consumido pela masmorra \n");
+        printf("=========== Game Over! =========== \n Você foi consumido pela masmorra \n");
+    }
+    else
+    {
+        printf("=========== Parabéns! =========== \n Você derrotou a masmorra \n");
     }
     
     return 0;
