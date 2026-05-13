@@ -5,6 +5,7 @@ int main() {
 
     // informações baralho
     // Das 44 cartas do baralho, 26 são monstros (naipe preto), 9 armas (Ouro) e 9 poções (Copas)
+
     int baralho_total[44];
     int baralho_naipes[44]; 
 
@@ -22,8 +23,13 @@ int main() {
     int carta_valor;
     int carta_naipe;    
 
+    printf("=========== Bem-vindo à Masmorra! =========== \n");
+    printf("Sobreviva ás 10 salas ou sucumba tentando.\n");
+
+
     // --- Finalização do jogo ---
-    if (hp <= 0)
+
+    if (hp <= 0) // Tem que add condição de vitória, mas como não tem nada, vamo se virar com o hp
     {
         printf("=========== Game Over! =========== \n Você foi consumido pela masmorra \n");
     }
