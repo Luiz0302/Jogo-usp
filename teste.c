@@ -16,10 +16,11 @@ int main() {
     int skip_sala = 0;
     int pode_skip = 1;
 
-    // informações mesa
+    // informações na mesa
 
-    
-
+    int mesa_ativa[4];
+    int carta_valor;
+    int carta_naipe;    
 
     // --- Finalização do jogo ---
     if (hp <= 0)
