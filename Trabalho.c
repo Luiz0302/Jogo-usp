@@ -20,8 +20,8 @@ int main() {
     // informações da mesa
 
     int mesa_ativa[4];
-    int carta_valor;
-    int carta_naipe;    
+    int carta_valor[4];
+    int carta_naipe[4];    
 
     printf("=========== Bem-vindo à Masmorra! =========== \n");
     printf("Sobreviva ás 10 salas ou sucumba tentando.\n");
@@ -31,9 +31,9 @@ int main() {
 
     printf("=========== Status do Player ===========\n");
     printf("HP: %d\n", hp);
-    printf("Arma Equipada: %d\n", arma_equipada);
+    printf("Força da Arma Equipada: %d\n", arma_equipada); 
     printf("Limite de Armas: %d\n", limite_arma);
-    printf("Pode pular a sala: %d\n", pode_skip);
+    printf("Pulo de sala: %d\n", pode_skip);
 
     
     

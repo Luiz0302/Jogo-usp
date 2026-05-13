@@ -1,0 +1,3 @@
+Adicionar randomização para descobrir o naipe e o valor das cartas
+adicionar parte monstros, poção de vida, masmorra
+depois continuo
