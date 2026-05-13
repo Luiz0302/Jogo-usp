@@ -1,2 +1,2 @@
 # Jogo-usp
-Ganhando experiencia
+Ganhando experiencia em uma atividade
