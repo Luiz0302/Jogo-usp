@@ -73,7 +73,7 @@ int main() {
     int opcao;
 
     printf("=========== Bem-vindo à Masmorra =========== \n");
-    printf("Sobreviva às 10 salas ou sucumba tentando.\n");
+    printf("\nSobreviva às 10 salas ou sucumba tentando.\n");
 
     // --- Loop Principal ---
     for (sala_atual = 1; sala_atual <= 10 && hp > 0; sala_atual++) 
@@ -105,7 +105,7 @@ int main() {
         if (opcao == 2 && pode_skip == 1) {
             printf("\nVocê decidiu pular a sala\n");
             pode_skip = 0; // Gasta o pulo
-            continue;      // Pula o resto deste turno e vai direto para a próxima sala
+            continue;      // Ainda n tem o combate então ta pulando pro próximo turno
         }
         
         printf("\nVocê decidiu enfrentar a sala\n");
