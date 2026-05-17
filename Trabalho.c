@@ -73,15 +73,14 @@ int main() {
     int opcao;
 
     printf("=========== Bem-vindo à Masmorra =========== \n");
-    printf("Sobreviva às 10 salas ou sucumba tentando.\n\n");
+    printf("Sobreviva às 10 salas ou sucumba tentando.\n");
 
     // --- Loop Principal ---
     for (sala_atual = 1; sala_atual <= 10 && hp > 0; sala_atual++) 
     {
         printf("\n=========== Sala %d/10 ===========\n", sala_atual);
         printf("HP: %d | Arma: %d\n", hp, arma_equipada);
-        printf("---------------------------------------------\n");
-        printf("As cartas desta sala são:\n");
+        printf("As cartas que voce tem na sala são:\n");
 
         // Puxa 4 cartas do baralho e já mostra na tela
         for(i = 0; i < 4; i++) 
@@ -98,8 +97,8 @@ int main() {
 
         // Menu da sala
         printf("\nO que deseja fazer?\n");
-        printf("[1] Enfrentar a sala\n");
-        printf("[2] Pular esta sala (Disponível: %d)\n", pode_skip);
+        printf("1 Enfrentar a sala\n");
+        printf("2 Pular esta sala (Disponível: %d)\n", pode_skip);
         printf("Escolha: ");
         scanf("%d", &opcao);
 
