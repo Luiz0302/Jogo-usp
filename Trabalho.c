@@ -91,8 +91,7 @@ int main() {
             if(mesa[i].naipe == 0) printf("Espadas (Monstro)\n");
             else if(mesa[i].naipe == 1) printf("Paus (Monstro)\n");
             else if(mesa[i].naipe == 2) printf("Ouros (Arma)\n");
-            else if(mesa[i].naipe == 3) printf("Copas (Poção)\n");
-        }
+            else if(mesa[i].naipe == 3) printf("Copas (Poção)\n");}
 
         // Menu da sala
         printf("\nO que deseja fazer?\n");
@@ -104,8 +103,8 @@ int main() {
         if (opcao == 2 && pode_skip == 1) {
             printf("\nVocê decidiu pular a sala\n");
             pode_skip = 0; // Gasta o pulo
-            continue;      // Ainda n tem o combate então ta pulando pro próximo turno
-        }
+            continue;}    // Ainda n tem o combate então ta pulando pro próximo turno
+        
         
         printf("\nVocê decidiu enfrentar a sala\n");
 
@@ -115,11 +114,9 @@ int main() {
     //  Finalização do jogo 
     if (hp <= 0) 
     {
-        printf("========= Game Over ========= \nVocê foi consumido pela masmorra.\n");
-    }
+        printf("========= Game Over ========= \nVocê foi consumido pela masmorra.\n");}
     else
     {
-        printf("=========== Parabéns =========== \nVocê derrotou a masmorra\n");
-    }
+        printf("=========== Parabéns =========== \nVocê derrotou a masmorra\n");}
     return 0;
 }
