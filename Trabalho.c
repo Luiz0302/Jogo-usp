@@ -3,6 +3,8 @@
 #include <stdlib.h> 
 #include <time.h>   
 
+// Utilizei Ia para auxiliar na lógica de verificação da defesa da arma
+
 struct Carta {
     int valor;
     int naipe; // 0: Espadas, 1: Paus, 2: Ouros, 3: Copas
@@ -162,26 +164,26 @@ int main() {
                         int dano_recebido = mesa[posicao].valor - arma_equipada;
                         if (dano_recebido > 0) {
                             hp -= dano_recebido;
-                            printf("Sua arma absorveu parte do impacto, você tomou %d de dano.\n", dano_recebido);
+                            printf("Sua arma absorveu parte do impacto... Mas você tomou %d de dano.\n", dano_recebido);
                         } else {
                             printf("Defesa perfeita! A arma tancou o monstro sem sofrer nenhuma arranhão.\n");
                         }
                         ultimo_monstro = mesa[posicao].valor; 
                     } else {
                         if (arma_equipada > 0) {
-                            printf("Sua arma não serve contra esse monstro!\n");
+                            printf("Sua arma não é nada diante este mosntro...\n");
                         }
                         hp -= mesa[posicao].valor;
-                        printf("Você recebeu %d de dano.\n", mesa[posicao].valor);
+                        printf("Sua arma é frágil demais para se defender. Você recebeu %d de dano.\n", mesa[posicao].valor);
                     }
                 }
-                // Lógica Arma 
+                // Equipa a arma 
                 else if (mesa[posicao].naipe == 2) {
                     arma_equipada = mesa[posicao].valor;
                     ultimo_monstro = 0; // Reset do histórico de quebra
                     printf(" -> (ARMA) Equipou uma arma de força %d.\n", arma_equipada);
                 }
-                // Lógica Poção 
+                // Uso da poção
                 else if (mesa[posicao].naipe == 3) {
                     if (!uso_pocao) {
                         hp += mesa[posicao].valor;
