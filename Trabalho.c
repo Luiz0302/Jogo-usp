@@ -139,7 +139,13 @@ int main() {
                 if (mesa_disponivel[i]) cartas_na_mesa++;
             }
             
-            int limite_resolucao = (cartas_na_mesa < 3) ? cartas_na_mesa : 3;
+            int limite_resolucao;
+
+            if (cartas_na_mesa < 3) {
+                limite_resolucao = cartas_na_mesa;
+            } else {
+                limite_resolucao = 3;
+            }
 
             while (cartas_resolvidas < limite_resolucao && hp > 0) {
                 int escolha = 0;
@@ -166,7 +172,7 @@ int main() {
                             hp -= dano_recebido;
                             printf("Sua arma absorveu parte do impacto... Mas você tomou %d de dano.\n", dano_recebido);
                         } else {
-                            printf("Defesa perfeita! A arma tancou o monstro sem sofrer nenhuma arranhão.\n");
+                            printf("Defesa perfeita! Sua arma anulou completamente o ataque.\n");
                         }
                         ultimo_monstro = mesa[posicao].valor; 
                     } else {
