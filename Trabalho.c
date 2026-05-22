@@ -3,130 +3,110 @@
 #include <stdlib.h> 
 #include <time.h>   
 
-// Estrutura do baralho 
 struct Carta {
     int valor;
-    int naipe;
+    int naipe; // 0: Espadas, 1: Paus, 2: Ouros, 3: Copas
 };
 
 int main() {
     setlocale(LC_ALL, "portuguese");
-    srand(time(NULL));   //Pra usar a aleatoriedade do rand 
+    srand(time(NULL)); 
 
-    // --- Definições do Baralho e da Mesa ---
-    struct Carta baralho[44];
+    // Com o tamanho do baralho sendo 100 evita problemas com cartas extras que vão sobrar
+    struct Carta baralho[100]; 
     struct Carta mesa[4];
-    
-    // Vetor para saber se a carta da mesa ja foi usada (1 tá livre, 0 já foi)
     int mesa_disponivel[4] = {1, 1, 1, 1}; 
+    
     int i = 0;
     int valor;
     int aleatorio;
     struct Carta temp;
 
-    // --- Informações player ---
+    // Status do Player
     int hp = 20;
     int arma_equipada = 0;
-    int limite_arma = 1;
-    int skip_sala = 0;
+    int ultimo_monstro = 0; // Guarda o valor do ultimo monstro pra regra de quebra da arma
     int pode_skip = 1; 
     
-    // Guarda o valor do ultimo monstro que a arma bateu para validar a regra de quebra
-    int ultimo_monstro = 0; 
-
-    // --- Preenchimento do Baralho ---
-    for(valor = 2; valor <= 14; valor++)
-    {
+    // Inicialização do Baralho 
+    for(valor = 2; valor <= 14; valor++) {
         baralho[i].valor = valor;
-        baralho[i].naipe = 0;
+        baralho[i].naipe = 0; // Espadas
         i++;
-    }     // Espadas
-
-    for(valor = 2; valor <= 14; valor++)
-    {
+    }
+    for(valor = 2; valor <= 14; valor++) {
         baralho[i].valor = valor;
-        baralho[i].naipe = 1;
+        baralho[i].naipe = 1; // Paus
         i++;
-    }     // Paus
-
-    for(valor = 2; valor <= 10; valor++)
-    {
+    }
+    for(valor = 2; valor <= 10; valor++) {
         baralho[i].valor = valor;
-        baralho[i].naipe = 2;
+        baralho[i].naipe = 2; // Ouros
         i++;
-    }     //Ouros
-
-    for(valor = 2; valor <= 10; valor++)
-    {
-        baralho[i].decay = 3; // Mantendo a estrutura padrão de preenchimento
+    }
+    for(valor = 2; valor <= 10; valor++) {
         baralho[i].valor = valor;
-        baralho[i].naipe = 3;
+        baralho[i].naipe = 3; // Copas
         i++;
-    }     // Copas
+    }
 
-    // --- Embaralhar  ---
-    for(i = 0; i <= 43; i++)
-    {
+    // Embaralhamento
+    for(i = 0; i <= 43; i++) {
         aleatorio = rand() % 44;
         temp = baralho[i];
         baralho[i] = baralho[aleatorio];
         baralho[aleatorio] = temp;
-    } //embaralhar.
+    }
 
-
-    // --- Variáveis para ajudar a controlar o jogo ---
     int sala_atual = 1;
     int topo_baralho = 0;
-    int fim_baralho = 44; // Guarda o final do vetor para empurrar cartas se pular sala
+    int fim_baralho = 44; 
     int opcao;
 
     printf("=========== Bem-vindo à Masmorra =========== \n");
-    printf("\nSobreviva às 10 salas ou sucumba tentando.\n");
+    printf("\nSobreviva às salas ou sucumba tentando.\n");
 
-    // Compra as 4 primeiras cartas para comecar a mesa
+    // Compra inicial
     for(i = 0; i < 4; i++) {
         mesa[i] = baralho[topo_baralho];
         topo_baralho++;
         mesa_disponivel[i] = 1;
     }
 
-    // Loop principal roda enquanto tiver vida e cartas no deck
-    while (topo_baralho <= fim_baralho && hp > 0) {
+    // Loop principal do jogo
+    while (hp > 0 && (mesa_disponivel[0] || mesa_disponivel[1] || mesa_disponivel[2] || mesa_disponivel[3])) {
         printf("\n=========== Sala %d ===========\n", sala_atual);
-        printf("HP: %d | Arma: %d\n", hp, arma_equipada);
-        printf("As cartas que voce tem na sala são:\n");
+        printf("HP: %d/20 | Arma: %d\n", hp, arma_equipada);
+        printf("Cartas na mesa:\n");
 
-        // Mostra o status atual das cartas na mesa
         for(i = 0; i < 4; i++) {
-            if (mesa_disponivel[i] == 1) {
-                printf("Carta %d -> Valor: %d - ", i + 1, mesa[i].valor);
+            if (mesa_disponivel[i]) {
+                printf("  Carta %d -> Valor %d de ", i + 1, mesa[i].valor);
                 if(mesa[i].naipe == 0) printf("Espadas (Monstro)\n");
                 else if(mesa[i].naipe == 1) printf("Paus (Monstro)\n");
                 else if(mesa[i].naipe == 2) printf("Ouros (Arma)\n");
                 else if(mesa[i].naipe == 3) printf("Copas (Poção)\n");
             } else {
-                printf("Carta %d -> [RESOLVIDA]\n", i + 1);
+                printf("  Carta %d\n", i + 1);
             }
         }
 
-        // Menu da sala
-        printf("\nO que deseja fazer?\n");
+        printf("\nO que vai fazer?\n");
         printf("1 Enfrentar a sala\n");
-        printf("2 Pular esta sala (Disponível: %d)\n", pode_skip);
+        printf("2 Pular sala (Disponível: %d)\n", pode_skip);
         printf("Escolha: ");
         scanf("%d", &opcao);
 
-        // Validando jogadas erradas
-        if (opcao != 1 && (opcao != 2 || pode_skip == 0)) {
-            printf("\n[ERRO] Opção inválida! Tente de novo.\n");
+        if (opcao != 1 && (opcao != 2 || !pode_skip)) {
+            printf("\n! Opção inválida ou skip indisponível!\n");
+            continue;
         }
         
-        // Logica para pular a sala jogando as cartas pro final
-        else if (opcao == 2 && pode_skip == 1) {
-            printf("\nVocê decidiu pular a sala\n");
-            
+        // Mecânica de Skip 
+        if (opcao == 2 && pode_skip) {
+            printf("\nVocê se acovardou e correu.\n");
             for(i = 0; i < 4; i++) {
-                if (mesa_disponivel[i] == 1) {
+                if (mesa_disponivel[i]) {
                     baralho[fim_baralho] = mesa[i];
                     fim_baralho++;
                 }
@@ -134,120 +114,129 @@ int main() {
             pode_skip = 0; 
             sala_atual++;
 
-            // Puxa mais 4 cartas novas
+            // Compra nova mesa completa
             for(i = 0; i < 4; i++) {
-                mesa[i] = baralho[topo_baralho];
-                topo_baralho++;
-                mesa_disponivel[i] = 1;
+                if (topo_baralho < fim_baralho) {
+                    mesa[i] = baralho[topo_baralho];
+                    topo_baralho++;
+                    mesa_disponivel[i] = 1;
+                } else {
+                    mesa_disponivel[i] = 0;
+                }
             }
         }
-        
-        // Logica para resolver as 3 cartas uma por uma
+        // Enfrentar a sala 
         else if (opcao == 1) {
-            printf("\nVocê decidiu enfrentar a sala\n");
+            printf("\nPrepare-se para o combate...\n");
             
             int cartas_resolvidas = 0;
             int ja_usou_pocao = 0;
+            int cartas_na_mesa = 0;
 
-            // Roda o loop interno controlando estritamente pelas variaveis (sem break)
-            while (cartas_resolvidas < 3 && hp > 0) {
+            for(i = 0; i < 4; i++) {
+                if (mesa_disponivel[i]) cartas_na_mesa++;
+            }
+            
+            int limite_resolucao = (cartas_na_mesa < 3) ? cartas_na_mesa : 3;
+
+            while (cartas_resolvidas < limite_resolucao && hp > 0) {
                 int escolha = 0;
-                printf("\nEscolha uma carta de 1 a 4 para resolver [%d de 3]: ", cartas_resolvidas + 1);
+                printf("\nEscolha uma carta (1 a 4) para interagir [%d/%d]: ", cartas_resolvidas + 1, limite_resolucao);
                 scanf("%d", &escolha);
 
-                // Tratando erros de escolha do usuario
-                if (escolha < 1 || escolha > 4 || mesa_disponivel[escolha - 1] == 0) {
-                    printf("[ERRO] Essa carta não está disponível!\n");
-                } else {
-                    int idx = escolha - 1;
-                    mesa_disponivel[idx] = 0; 
-                    cartas_resolvidas++;
+                if (escolha < 1 || escolha > 4 || !mesa_disponivel[escolha - 1]) {
+                    printf("[!] Carta inválida ou já resolvida.\n");
+                    continue;
+                }
 
-                    // Logica de Combate (Espadas ou Paus)
-                    if (mesa[idx].naipe == 0 || mesa[idx].naipe == 1) {
-                        printf("[COMBATE] Monstro valor %d!\n", mesa[idx].valor);
-                        
-                        // Checa se a arma ainda e valida (regra do monstro menor)
-                        if (arma_equipada > 0 && (ultimo_monstro == 0 || mesa[idx].valor < ultimo_monstro)) {
-                            int diferenca_dano = mesa[idx].valor - arma_equipada;
-                            
-                            if (diferenca_dano > 0) {
-                                hp = hp - diferenca_dano;
-                                printf("Você usou sua arma e sofreu %d de dano (diferença resolvida).\n", diferenca_dano);
-                            } else {
-                                printf("Sua arma é forte o suficiente! Você não sofreu nenhum dano nesta carta.\n");
-                            }
-                            ultimo_monstro = mesa[idx].valor; 
-                        } else {
-                            if (arma_equipada > 0) {
-                                printf("Sua arma travou/quebrou nesse monstro ");
-                            }
-                            hp = hp - mesa[idx].valor;
-                            printf("Tomou o dano inteiro do monstro: %d\n", mesa[idx].valor);
-                        }
-                    }
+                int idx = escolha - 1;
+                mesa_disponivel[idx] = 0; 
+                cartas_resolvidas++;
+
+                // Lógica dos Monstros
+                if (mesa[idx].naipe == 0 || mesa[idx].naipe == 1) {
+                    printf(" MONSTRO Força %d\n", mesa[idx].valor);
                     
-                    // Logica para equipar Arma (Ouros)
-                    else if (mesa[idx].naipe == 2) {
-                        arma_equipada = mesa[idx].valor;
-                        ultimo_monstro = 0; // Nova arma limpa a restrição anterior
-                        printf(" Nova arma equipada. Força: %d\n", arma_equipada);
-                    }
-                    
-                    // Logica da Poção (Copas)
-                    else if (mesa[idx].naipe == 3) {
-                        if (ja_usou_pocao == 0) {
-                            hp = hp + mesa[idx].valor;
-                            if (hp > 20) {
-                                hp = 20; 
-                            }
-                            ja_usou_pocao = 1; 
-                            printf("Curado. Seu HP subiu para %d\n", hp);
+                    // Verifica se a arma defende
+                    if (arma_equipada > 0 && (ultimo_monstro == 0 || mesa[idx].valor < ultimo_monstro)) {
+                        int dano_recebido = mesa[idx].valor - arma_equipada;
+                        if (dano_recebido > 0) {
+                            hp -= dano_recebido;
+                            printf("Sua arma absorveu parte do impacto Tomou %d de dano.\n", dano_recebido);
                         } else {
-                            printf("Você só pode usar uma poção por rodada. Essa foi perdida.\n");
+                            printf("Defesa perfeita! A arma tancou o monstro sem sofrer dano.\n");
                         }
+                        ultimo_monstro = mesa[idx].valor; 
+                    } else {
+                        if (arma_equipada > 0) {
+                            printf("    [!] Sua arma não serve contra esse monstro!\n");
+                        }
+                        hp -= mesa[idx].valor;
+                        printf("    Sem defesa! Tomou %d de dano direto.\n", mesa[idx].valor);
+                    }
+                }
+                // Lógica Arma 
+                else if (mesa[idx].naipe == 2) {
+                    arma_equipada = mesa[idx].valor;
+                    ultimo_monstro = 0; // Reset do histórico de quebra
+                    printf(" -> [ARMA] Equipou uma arma de força %d.\n", arma_equipada);
+                }
+                // Lógica Poção 
+                else if (mesa[idx].naipe == 3) {
+                    if (!ja_usou_pocao) {
+                        hp += mesa[idx].valor;
+                        if (hp > 20) hp = 20; 
+                        ja_usou_pocao = 1; 
+                        printf(" -> [POÇÃO] Curado! HP atual: %d\n", hp);
+                    } else {
+                        printf(" -> [POÇÃO] Efeito desperdiçado! Só é permitido uma poção por sala.\n");
                     }
                 }
             }
 
-            // Preparando a proxima sala guardando a 4ª carta que sobrou
+            // Transição de sala
             if (hp > 0) {
                 pode_skip = 1; 
                 sala_atual++;
 
                 struct Carta sobrou;
+                int achou_sobra = 0;
+
                 for(i = 0; i < 4; i++) {
-                    if (mesa_disponivel[i] == 1) {
+                    if (mesa_disponivel[i]) {
                         sobrou = mesa[i];
+                        achou_sobra = 1;
                     }
                 }
 
-                // Monta a mesa da rodada seguinte com a que sobrou + 3 novas
-                mesa[0] = sobrou;
-                mesa_disponivel[0] = 1;
+                // Reseta estados da mesa antiga
+                for(i = 0; i < 4; i++) mesa_disponivel[i] = 0;
 
-                for(i = 1; i < 4; i++) {
+                // Repovoa a mesa
+                int start_idx = 0;
+                if (achou_sobra) {
+                    mesa[0] = sobrou;
+                    mesa_disponivel[0] = 1;
+                    start_idx = 1;
+                }
+
+                for(i = start_idx; i < 4; i++) {
                     if (topo_baralho < fim_baralho) {
                         mesa[i] = baralho[topo_baralho];
                         topo_baralho++;
                         mesa_disponivel[i] = 1;
-                    } else {
-                        mesa_disponivel[i] = 0; 
                     }
                 }
             }
         }
     }
 
-    // --- Finalização do jogo ---
-    printf("\n=============================================\n");
-    if (hp <= 0) 
-    {
+    printf("\n====================================\n");
+    if (hp <= 0) {
         printf("========= Game Over ========= \nVocê foi consumido pela masmorra.\n");
-    }
-    else
-    {
+    } else {
         printf("=========== Parabéns =========== \nVocê derrotou a masmorra\n");
     }
+
     return 0;
 }
