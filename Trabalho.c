@@ -17,7 +17,7 @@ int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
     srand(time(NULL)); 
-    // Com o tamanho do baralho sendo 100 evita problemas com cartas extras que vão sobrar
+    // Baralho com tamanho 100 por causa do descarte
     struct Carta baralho[100]; 
     struct Carta mesa[4];
     int mesa_disponivel[4] = {1, 1, 1, 1}; 
@@ -30,7 +30,7 @@ int main() {
     // Status do Player
     int hp = 20;
     int arma_equipada = 0;
-    int ultimo_monstro = 0; // Guarda o valor do ultimo monstro pra regra de quebra da arma
+    int ultimo_monstro = 0; // Guarda o valor do monstro pra regra da quebra de arma
     int pode_skip = 1; 
     
     // Inicialização do Baralho 
