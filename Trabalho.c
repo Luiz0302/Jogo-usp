@@ -98,7 +98,7 @@ int main() {
         scanf("%d", &opcao);
 
         if (opcao != 1 && (opcao != 2 || !pode_skip)) {
-            printf("\n! Opção inválida ou skip indisponível!\n");
+            printf("\n(!) Skip indisponível!\n");
             continue;
         }
         
@@ -130,7 +130,7 @@ int main() {
             printf("\nPrepare-se para o combate...\n");
             
             int cartas_resolvidas = 0;
-            int ja_usou_pocao = 0;
+            int uso_pocao = 0;
             int cartas_na_mesa = 0;
 
             for(i = 0; i < 4; i++) {
@@ -145,51 +145,51 @@ int main() {
                 scanf("%d", &escolha);
 
                 if (escolha < 1 || escolha > 4 || !mesa_disponivel[escolha - 1]) {
-                    printf("[!] Carta inválida ou já resolvida.\n");
+                    printf("Carta inválida ou já resolvida.\n");
                     continue;
                 }
 
-                int idx = escolha - 1;
-                mesa_disponivel[idx] = 0; 
+                int posicao = escolha - 1;
+                mesa_disponivel[posicao] = 0; 
                 cartas_resolvidas++;
 
                 // Lógica dos Monstros
-                if (mesa[idx].naipe == 0 || mesa[idx].naipe == 1) {
-                    printf(" MONSTRO Força %d\n", mesa[idx].valor);
+                if (mesa[posicao].naipe == 0 || mesa[posicao].naipe == 1) {
+                    printf("MONSTRO Força %d\n", mesa[posicao].valor);
                     
                     // Verifica se a arma defende
-                    if (arma_equipada > 0 && (ultimo_monstro == 0 || mesa[idx].valor < ultimo_monstro)) {
-                        int dano_recebido = mesa[idx].valor - arma_equipada;
+                    if (arma_equipada > 0 && (ultimo_monstro == 0 || mesa[posicao].valor < ultimo_monstro)) {
+                        int dano_recebido = mesa[posicao].valor - arma_equipada;
                         if (dano_recebido > 0) {
                             hp -= dano_recebido;
-                            printf("Sua arma absorveu parte do impacto Tomou %d de dano.\n", dano_recebido);
+                            printf("Sua arma absorveu parte do impacto, você tomou %d de dano.\n", dano_recebido);
                         } else {
-                            printf("Defesa perfeita! A arma tancou o monstro sem sofrer dano.\n");
+                            printf("Defesa perfeita! A arma tancou o monstro sem sofrer nenhuma arranhão.\n");
                         }
-                        ultimo_monstro = mesa[idx].valor; 
+                        ultimo_monstro = mesa[posicao].valor; 
                     } else {
                         if (arma_equipada > 0) {
-                            printf("    [!] Sua arma não serve contra esse monstro!\n");
+                            printf("Sua arma não serve contra esse monstro!\n");
                         }
-                        hp -= mesa[idx].valor;
-                        printf("    Sem defesa! Tomou %d de dano direto.\n", mesa[idx].valor);
+                        hp -= mesa[posicao].valor;
+                        printf("Você recebeu %d de dano.\n", mesa[posicao].valor);
                     }
                 }
                 // Lógica Arma 
-                else if (mesa[idx].naipe == 2) {
-                    arma_equipada = mesa[idx].valor;
+                else if (mesa[posicao].naipe == 2) {
+                    arma_equipada = mesa[posicao].valor;
                     ultimo_monstro = 0; // Reset do histórico de quebra
-                    printf(" -> [ARMA] Equipou uma arma de força %d.\n", arma_equipada);
+                    printf(" -> (ARMA) Equipou uma arma de força %d.\n", arma_equipada);
                 }
                 // Lógica Poção 
-                else if (mesa[idx].naipe == 3) {
-                    if (!ja_usou_pocao) {
-                        hp += mesa[idx].valor;
+                else if (mesa[posicao].naipe == 3) {
+                    if (!uso_pocao) {
+                        hp += mesa[posicao].valor;
                         if (hp > 20) hp = 20; 
-                        ja_usou_pocao = 1; 
-                        printf(" -> [POÇÃO] Curado! HP atual: %d\n", hp);
+                        uso_pocao = 1; 
+                        printf(" -> (POÇÃO) Você se curou. HP atual: %d\n", hp);
                     } else {
-                        printf(" -> [POÇÃO] Efeito desperdiçado! Só é permitido uma poção por sala.\n");
+                        printf(" -> (POÇÃO) Efeito desperdiçado! Só é permitido uma poção por sala.\n");
                     }
                 }
             }
@@ -213,14 +213,14 @@ int main() {
                 for(i = 0; i < 4; i++) mesa_disponivel[i] = 0;
 
                 // Repovoa a mesa
-                int start_idx = 0;
+                int inicia_posicao = 0;
                 if (achou_sobra) {
                     mesa[0] = sobrou;
                     mesa_disponivel[0] = 1;
-                    start_idx = 1;
+                    inicia_posicao = 1;
                 }
 
-                for(i = start_idx; i < 4; i++) {
+                for(i = inicia_posicao; i < 4; i++) {
                     if (topo_baralho < fim_baralho) {
                         mesa[i] = baralho[topo_baralho];
                         topo_baralho++;
@@ -231,12 +231,11 @@ int main() {
         }
     }
 
-    printf("\n====================================\n");
+    printf("\n=============================\n");
     if (hp <= 0) {
         printf("========= Game Over ========= \nVocê foi consumido pela masmorra.\n");
     } else {
         printf("=========== Parabéns =========== \nVocê derrotou a masmorra\n");
     }
-
     return 0;
 }
