@@ -2,7 +2,7 @@
 #include <locale.h>
 #include <stdlib.h> 
 #include <time.h>   
-
+#include <windows.h>
 // Utilizei Ia para auxiliar na lógica de verificação da defesa da arma
 
 struct Carta {
@@ -11,9 +11,12 @@ struct Carta {
 };
 
 int main() {
-    setlocale(LC_ALL, "portuguese");
-    srand(time(NULL)); 
 
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    setlocale(LC_ALL, "pt_BR.UTF-8");
+
+    srand(time(NULL)); 
     // Com o tamanho do baralho sendo 100 evita problemas com cartas extras que vão sobrar
     struct Carta baralho[100]; 
     struct Carta mesa[4];
