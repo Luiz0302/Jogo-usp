@@ -127,7 +127,7 @@ int main() {
                 }
             }
         }
-        // Enfrentar a sala 
+        // Enfrenta a sala 
         else if (opcao == 1) {
             printf("\nPrepare-se para o combate...\n");
             
@@ -170,7 +170,7 @@ int main() {
                         int dano_recebido = mesa[posicao].valor - arma_equipada;
                         if (dano_recebido > 0) {
                             hp -= dano_recebido;
-                            printf("Sua arma absorveu parte do impacto... Mas você tomou %d de dano.\n", dano_recebido);
+                            printf("Sua arma absorveu parte do impacto... Você tomou %d de dano.\n", dano_recebido);
                         } else {
                             printf("Defesa perfeita! Sua arma anulou completamente o ataque.\n");
                         }
@@ -187,7 +187,7 @@ int main() {
                 else if (mesa[posicao].naipe == 2) {
                     arma_equipada = mesa[posicao].valor;
                     ultimo_monstro = 0; // Reset do histórico de quebra
-                    printf(" -> (ARMA) Equipou uma arma de força %d.\n", arma_equipada);
+                    printf(" (ARMA) Equipou uma arma de força %d.\n", arma_equipada);
                 }
                 // Uso da poção
                 else if (mesa[posicao].naipe == 3) {
@@ -195,9 +195,9 @@ int main() {
                         hp += mesa[posicao].valor;
                         if (hp > 20) hp = 20; 
                         uso_pocao = 1; 
-                        printf(" -> (POÇÃO) Você se curou. HP atual: %d\n", hp);
+                        printf(" (POÇÃO) Você se curou. HP atual: %d\n", hp);
                     } else {
-                        printf(" -> (POÇÃO) Efeito desperdiçado! Só é permitido uma poção por sala.\n");
+                        printf(" (POÇÃO) Efeito desperdiçado! Só é permitido uma poção por sala.\n");
                     }
                 }
             }
